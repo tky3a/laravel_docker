@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\ContactFormController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,10 @@ Route::get('/', function () {
 
 // 最新Laravelの書き方
 Route::get('tests/test', [TestController::class, 'index']);
+
+Route::resource('contacts', ContactFormController::class)->only([
+    'index', 'show'
+]);
 
 Auth::routes();
 
