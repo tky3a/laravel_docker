@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\Models\ContactForm;
+
 class ContactFormController extends Controller
 {
     /**
@@ -14,6 +16,7 @@ class ContactFormController extends Controller
     public function index()
     {
         //
+        return view('contact.index');
     }
 
     /**
@@ -24,6 +27,7 @@ class ContactFormController extends Controller
     public function create()
     {
         //
+        return view('contact.create');
     }
 
     /**
@@ -34,7 +38,20 @@ class ContactFormController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // DB保存するためにインスタンス作成
+        $contactF = new ContactForm;
+
+        // $request->all()でも全ての要素をしゅとくできるがtokenも入ってしまう...
+        $contactF->your_name = $request->input('your_name');
+        $contactF->title = $request->input('title');
+        $contactF->email = $request->input('email');
+        $contactF->url = $request->input('url');
+        $contactF->gender = $request->input('gender');
+        $contactF->age = $request->input('age');
+        $contactF->contact = $request->input('contact');
+
+        $contactF->save();
+        return redirect('contact/index');
     }
 
     /**
