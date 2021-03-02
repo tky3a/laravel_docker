@@ -16,7 +16,9 @@ class ContactFormController extends Controller
     public function index()
     {
         //
-        return view('contact.index');
+        $contactForms = ContactForm::all();
+        dump($contactForms);
+        return view('contact.index', compact('contactForms'));
     }
 
     /**
@@ -26,7 +28,6 @@ class ContactFormController extends Controller
      */
     public function create()
     {
-        //
         return view('contact.create');
     }
 
@@ -97,5 +98,43 @@ class ContactFormController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function DLCsv(Request $request)
+    {
+        // dd($request->contactForms123);
+        // 
+
+        // データの作成
+        // $contactForms = $request->contactForms;
+        // dd($contactForms);
+        $users = [
+            ['id' => '太郎', 'your_name' => 24],
+            ['name' => '花子', 'age' => 21]
+        ];
+        // カラムの作成
+        $head = ['id', 'your_name'];
+
+        // 書き込み用ファイルを開く
+        $f = fopen('test.csv', 'w');
+        if ($f) {
+            // カラムの書き込み
+            mb_convert_variables('SJIS', 'UTF-8', $head);
+            fputcsv($f, $head);
+            // データの書き込み
+            foreach ($users as $user) {
+                mb_convert_variables('SJIS', 'UTF-8', $user);
+                fputcsv($f, $user);
+            }
+        }
+        // ファイルを閉じる
+        fclose($f);
+
+        // HTTPヘッダ
+        header("Content-Type: application/octet-stream");
+        header('Content-Length: ' . filesize('test.csv'));
+        header('Content-Disposition: attachment; filename=test.csv');
+        readfile('test.csv');
+        return redirect('contact/index');
     }
 }

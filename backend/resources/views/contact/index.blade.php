@@ -18,6 +18,14 @@
                             新規作成
                         </button>
                     </form>
+                    <br>
+                    <form method="post" action="{{route('contact.dlcsv')}}">
+                        @csrf
+                        <input type="hidden" name="contactForms[array]" value={{$contactForms}}>
+                        <button type="submit" class="btn btn-primary">
+                            CSV
+                        </button>
+                    </form>
                     indexです
                 </div>
             </div>
